@@ -4,15 +4,18 @@
 #include <time.h>
 #include "imageloader.h"
 #include "audio.h"
-#include "testlevel.h"
-
+#include "scaler.h"
+/*#include "testlevel.h"*/
+SDL_Surface *phys;
 SDL_Surface *screen;
+SDL_Surface *scalesurf;
     SDL_Surface *overlay;
 	SDL_Surface *tiles;
 	SDL_Surface *backg;
 	SDL_Surface *startscr;
 	SDL_Surface *govr;
     SDL_Event event;
+	int scale=1;
 enum scene{
 	SCN_STRT,
 	SCN_PLAY,
@@ -203,6 +206,19 @@ int main(int argc __attribute__((unused)), char **argv)
         fprintf(stderr,"SDL error %s\n", SDL_GetError());
         return 2;
     }
+	
+#ifdef _3ds
+	SDL_N3DSKeyBind(KEY_START,SDLK_SPACE);
+
+
+
+
+#endif	
+	
+	
+	
+	
+	
     wanted.freq = 22050;
     wanted.format = AUDIO_S16;
     wanted.channels = 2;    /* 1 = mono, 2 = stereo */
@@ -222,7 +238,20 @@ int main(int argc __attribute__((unused)), char **argv)
 	govr=loadJpeg("tetrgovr.jpg");
 	startscr=loadJpeg("tetrstrt.jpg");
     //window = SDL_CreateWindow("SSFN normal renderer bitmap font test",SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,800,600,0);
-    screen = SDL_SetVideoMode(320,240,32,SDL_SWSURFACE);
+	
+	
+	if(scale>1){
+		phys = SDL_SetVideoMode(320*scale,240*scale,32,SDL_SWSURFACE);
+		
+		screen=SDL_CreateRGBSurface(0,320,240,32,0x000000FF,0x0000FF00,0x00FF0000,0xFF000000);
+		scalesurf=SDL_CreateRGBSurface(0,320*scale,240*scale,32,0x000000FF,0x0000FF00,0x00FF0000,0xFF000000);
+		
+		
+	}else{
+		phys = SDL_SetVideoMode(320,240,32,SDL_SWSURFACE);
+		screen=phys;
+	}
+    
     //memset(screen->pixels, 0xF8, screen->pitch*screen->h);
 	curScn=SCN_STRT;
 	lastTime=SDL_GetTicks();
@@ -394,7 +423,21 @@ int main(int argc __attribute__((unused)), char **argv)
 			SDL_BlitSurface( govr, NULL, screen, NULL );
 			
 		}
-		SDL_Flip(screen);
+		
+		
+		
+		
+		
+		
+		
+		
+		if(scale>1){
+			
+			scaleImg(screen,scalesurf,2);
+			SDL_BlitSurface( scalesurf, NULL, phys, NULL );
+		
+		}
+		SDL_Flip(phys);
 
 	
 	}
