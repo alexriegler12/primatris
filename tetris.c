@@ -195,6 +195,7 @@ void fill_audio(void *udata, Uint8 *stream, int len){
 SDL_AudioSpec wanted;
 int main(int argc __attribute__((unused)), char **argv)
 {
+	int ticktime=1000;
     //SDL_Window *window;
     
     srand(time(0));
@@ -306,7 +307,7 @@ int main(int argc __attribute__((unused)), char **argv)
 		
 		
 		
-		if(curTime>lastTime+1000){/*Tick*/
+		if(curTime>lastTime+ticktime){/*Tick*/
 			
 			
 			if(checkColAndBounds(0,1)){
@@ -333,10 +334,14 @@ int main(int argc __attribute__((unused)), char **argv)
 			
 			}
 			if(down){
-				if(!checkColAndBounds(0,1)){
+				/*if(!checkColAndBounds(0,1)){
 					curPos.y++;
-				}
+				}*/
+				ticktime=75;
 				
+			}else{
+				
+				ticktime=1000;
 			}
 			if(up){
 				
@@ -368,8 +373,9 @@ int main(int argc __attribute__((unused)), char **argv)
 					curScn=SCN_PLAY;
 					clrField();
 					selectRandomPiece(1);
+					debounceTime=curTime;
 				}
-				debounceTime=curTime;
+				
 			}
 			
 			SDL_BlitSurface( startscr, NULL, screen, NULL );
@@ -380,9 +386,10 @@ int main(int argc __attribute__((unused)), char **argv)
 			if(curTime>debounceTime+150){
 				if(start){
 					curScn=SCN_STRT;
+					debounceTime=curTime;
 				
 				}
-				debounceTime=curTime;
+				
 			}
 			SDL_BlitSurface( govr, NULL, screen, NULL );
 			
