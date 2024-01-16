@@ -408,8 +408,8 @@ int main(int argc __attribute__((unused)), char **argv)
 				}
 				
 			}
-			
-			SDL_BlitSurface( startscr, NULL, screen, NULL );
+			if(curScn==SCN_STRT)
+				SDL_BlitSurface( startscr, NULL, screen, NULL );
 			
 			
 		}
