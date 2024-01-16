@@ -341,6 +341,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			
 			if(checkColAndBounds(0,1)){
 				writeCurrentToField();
+				checkLinesAndDeleteFull();
 				needNew=1;
 			}else{
 				curPos.y++;	
@@ -386,9 +387,9 @@ int main(int argc __attribute__((unused)), char **argv)
 		}
 		
 		
-		checkLinesAndDeleteFull();
+		/*checkLinesAndDeleteFull();*/
 		/*ENDLOGIC*/
-		SDL_BlitSurface( backg, NULL, screen, NULL );
+		/*SDL_BlitSurface( backg, NULL, screen, NULL );*/
 		SDL_BlitSurface( overlay, NULL, screen, NULL );
 		drawField(112,48);
 		
@@ -400,6 +401,7 @@ int main(int argc __attribute__((unused)), char **argv)
 			if(curTime>debounceTime+150){
 				if(start){
 					curScn=SCN_PLAY;
+					SDL_BlitSurface( backg, NULL, screen, NULL );
 					clrField();
 					selectRandomPiece(1);
 					debounceTime=curTime;
